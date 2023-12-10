@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "ts-node ./index.ts",
+        "dev": "tsc-watch --onSuccess \"node ./dist/index.js\"",
         "test": "echo \"Error: no test specified\" && exit 1",
         "lint": "eslint --fix ./src/**/*",
         "format": "prettier --write ./src/**/*"
@@ -21,8 +21,12 @@
         "@typescript-eslint/eslint-plugin": "^6.13.2",
         "@typescript-eslint/parser": "^6.13.2",
         "eslint": "^8.55.0",
+        "module-alias": "^2.2.3",
         "prettier": "^3.1.0",
-        "ts-node": "^10.9.2",
+        "tsc-watch": "^6.0.4",
         "typescript": "^5.3.3"
+    },
+    "_moduleAliases": {
+        "@": "dist/src"
     }
 }
