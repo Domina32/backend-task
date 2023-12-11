@@ -6,7 +6,7 @@ const db = {
     user: env.DB_USER,
     password: env.DB_PASSWORD,
     database: env.DB_NAME || "jokes",
-    port: env.DB_PORT || 5432,
+    port: env.DB_PORT ? parseInt(env.DB_PORT) : 5432,
     ssl: {
         mode: "VERIFY_IDENTITY",
         ca: fs.readFileSync("/etc/ssl/cert.pem", "utf-8"),

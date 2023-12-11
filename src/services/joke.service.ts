@@ -1,12 +1,24 @@
-import db from "./db.service";
+import db from "@/services/db.service";
+import { JokeType } from "@/models/joke";
 
-async function create() {}
+async function getNewRandom(): Promise<JokeType> {
+    const response = await fetch("https://api.chucknorris.io/jokes/random");
+    return response.json();
+}
 
-async function update() {}
+async function get(): Promise<void> {}
 
-async function remove() {}
+async function create(joke: JokeType): Promise<void> {
+    await db.query(`INSERT INTO jokes(value) VALUES (${joke.value});`);
+}
+
+async function update(): Promise<void> {}
+
+async function remove(): Promise<void> {}
 
 export default {
+    getNewRandom,
+    get,
     create,
     update,
     remove,
