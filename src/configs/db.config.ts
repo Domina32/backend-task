@@ -1,16 +1,11 @@
-import fs from "fs";
 const env = process.env;
 
 const db = {
-    host: env.DB_HOST,
-    user: env.DB_USER,
-    password: env.DB_PASSWORD,
-    database: env.DB_NAME || "jokes",
+    host: env.DB_HOST || "localhost",
+    user: env.DB_USER || "domina",
+    password: env.DB_PASSWORD || "domina",
+    database: env.DB_NAME || "default",
     port: env.DB_PORT ? parseInt(env.DB_PORT) : 5432,
-    ssl: {
-        mode: "VERIFY_IDENTITY",
-        ca: fs.readFileSync("/etc/ssl/cert.pem", "utf-8"),
-    },
 };
 
 export default db;

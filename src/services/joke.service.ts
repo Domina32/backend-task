@@ -1,25 +1,31 @@
-import db from "@/services/db.service";
-import { JokeType } from "@/models/joke";
+import { AppDataSource } from "@/models/data-source";
+import { Joke, JokeType } from "@/models/entities/Joke";
 
-async function getNewRandom(): Promise<JokeType> {
+async function fetchNewRandom(): Promise<JokeType> {
     const response = await fetch("https://api.chucknorris.io/jokes/random");
+
     return response.json();
 }
 
-async function get(): Promise<void> {}
+// TODO
+async function getEntries(): Promise<void> {}
 
-async function create(joke: JokeType): Promise<void> {
-    await db.query(`INSERT INTO jokes(value) VALUES (${joke.value});`);
+async function createEntry(text: JokeType["value"]): Promise<void> {
+    const joke = new Joke();
+    joke.value = text;
+    AppDataSource.manager.save(joke);
 }
 
-async function update(): Promise<void> {}
+// TODO
+async function updateEntry(): Promise<void> {}
 
-async function remove(): Promise<void> {}
+// TODO
+async function removeEntry(): Promise<void> {}
 
 export default {
-    getNewRandom,
-    get,
-    create,
-    update,
-    remove,
+    fetchNewRandom,
+    getEntries,
+    createEntry,
+    updateEntry,
+    removeEntry,
 };

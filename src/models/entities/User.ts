@@ -1,3 +1,23 @@
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+
+@Entity()
+export class User {
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column()
+    email: string;
+
+    @Column()
+    password: string;
+
+    @Column()
+    firstName: string;
+
+    @Column()
+    lastName: string;
+}
+
 const emailRegex = new RegExp(
     /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
 );

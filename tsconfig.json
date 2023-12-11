@@ -28,7 +28,6 @@
         "noImplicitReturns": true /* Enable error reporting for codepaths that do not explicitly return in a function. */,
         // "noImplicitAny": true,                            /* Enable error reporting for expressions and declarations with an implied 'any' type. */
         // "strictBindCallApply": true,                      /* Check that the arguments for 'bind', 'call', and 'apply' methods match the original function. */
-        // "strictPropertyInitialization": true,             /* Check for class properties that are declared but not set in the constructor. */
         // "noUnusedLocals": true,                           /* Enable error reporting when local variables aren't read. */
         // "noUnusedParameters": true,                       /* Raise an error when a function parameter isn't read. */
         // "exactOptionalPropertyTypes": true,               /* Interpret optional property types as written, rather than adding 'undefined'. */
@@ -42,6 +41,7 @@
         "skipLibCheck": true /* Skip type checking all .d.ts files. */,
 
         "emitDecoratorMetadata": true,
-        "experimentalDecorators": true
+        "experimentalDecorators": true,
+        "strictPropertyInitialization": false
     }
 }
