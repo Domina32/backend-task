@@ -2,11 +2,10 @@ import "module-alias/register";
 import "reflect-metadata";
 import express from "express";
 import jokeRouter from "@/routes/joke.route";
+import userRouter from "@/routes/user.route";
 import { errorHandler } from "@/middleware/error.middleware";
 import { logger } from "@/middleware/logging.middleware";
 import { AppDataSource } from "@/models/data-source";
-import { Joke } from "@/models/entities/Joke";
-import { User } from "@/models/entities/User";
 
 AppDataSource.initialize()
     .then(async () => {
@@ -22,6 +21,7 @@ AppDataSource.initialize()
             res.json({ message: "ok" });
         });
         app.use("/joke", jokeRouter);
+        app.use("/user", userRouter);
 
         app.listen(port, () => {
             console.log(`Example app listening at http://localhost:${port}`);
