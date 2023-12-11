@@ -4,6 +4,7 @@ export interface UserType {
     password: string;
     firstName: string;
     lastName: string;
+    signedUp: boolean;
 }
 @Entity()
 export class User {
@@ -21,4 +22,7 @@ export class User {
 
     @Column()
     lastName: string;
+
+    @Column()
+    signedUp: boolean;
 }

@@ -1,6 +1,10 @@
 import { NextFunction, Response, Request } from "express";
 import userService from "@/services/user.service";
 import { User, UserType } from "@/models/entities/User";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+
+const env = process.env;
 
 async function create(
     req: Request,
@@ -13,6 +17,7 @@ async function create(
         user.password = "pass";
         user.firstName = "first name";
         user.lastName = "last name";
+        user.signedUp = false;
 
         res.json(user);
         await userService.createEntry(
@@ -20,6 +25,7 @@ async function create(
             user.password,
             user.firstName,
             user.lastName,
+            user.signedUp,
         );
 
         // res.json(await userService.createEntry());
@@ -29,4 +35,55 @@ async function create(
     }
 }
 
-export default { create };
+async function login(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+): Promise<void> {
+    try {
+    } catch (e: unknown) {
+        console.error(`Error logging in`, (e as Error).message);
+        next(e);
+    }
+}
+
+async function signup(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+): Promise<void> {
+    try {
+        console.log(req.body);
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(req.body.password, salt);
+
+        const user = new User();
+        user.email = req.body.email;
+        user.password = hashPassword;
+        user.firstName = req.body.firstName;
+        user.lastName = req.body.lastName;
+        user.signedUp = req.body.signedUp || false;
+
+        await userService.createEntry(
+            user.email,
+            user.password,
+            user.firstName,
+            user.lastName,
+            user.signedUp,
+        );
+
+        let payload = {
+            id: user.id,
+            user_type_id: req.body.user_type_id || false,
+        };
+
+        const token = jwt.sign(payload, env.TOKEN_SECRET || "secret");
+
+        res.status(200).send({ token });
+    } catch (e: unknown) {
+        console.error(`Error signing up`, (e as Error).message);
+        next(e);
+    }
+}
+
+export default { create, login, signup };

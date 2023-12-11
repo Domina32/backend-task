@@ -1,5 +1,6 @@
 import "module-alias/register";
 import "reflect-metadata";
+import bodyParser from "body-parser";
 import express from "express";
 import jokeRouter from "@/routes/joke.route";
 import userRouter from "@/routes/user.route";
@@ -12,7 +13,8 @@ AppDataSource.initialize()
         const app = express();
         const port = process.env.PORT || 3000;
 
-        // ignoring bodyParser (expecting JSON)
+        app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({ extended: true }));
 
         app.use(logger);
         app.use(errorHandler);
@@ -21,7 +23,10 @@ AppDataSource.initialize()
             res.json({ message: "ok" });
         });
         app.use("/joke", jokeRouter);
+
         app.use("/user", userRouter);
+        app.use("/signup", userRouter);
+        app.use("/login", userRouter);
 
         app.listen(port, () => {
             console.log(`Example app listening at http://localhost:${port}`);
