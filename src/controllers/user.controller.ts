@@ -3,6 +3,7 @@ import userService from "@/services/user.service";
 import { User, UserType } from "@/models/entities/User";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { AppDataSource } from "@/models/data-source";
 
 const env = process.env;
 
@@ -41,6 +42,31 @@ async function login(
     next: NextFunction,
 ): Promise<void> {
     try {
+        const user = await AppDataSource.manager.findOneBy(User, {
+            email: req.body.email,
+        });
+
+        if (!user) {
+            res.status(401).send("No user with this email");
+        } else {
+            const validPass = await bcrypt.compare(
+                req.body.password,
+                user.password,
+            );
+            if (!validPass) {
+                res.status(401).send("Email or password is incorrect");
+                return;
+            }
+
+            let payload = {
+                id: user.id,
+                user_type_id: req.body.user_type_id || false,
+            };
+
+            const token = jwt.sign(payload, env.TOKEN_SECRET || "secret");
+
+            res.status(200).header("auth-token", token).send({ token: token });
+        }
     } catch (e: unknown) {
         console.error(`Error logging in`, (e as Error).message);
         next(e);
