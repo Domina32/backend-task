@@ -5,19 +5,6 @@ const validateEmail = (email: string): boolean => {
     return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(email);
 };
 
-async function checkEmailIsUnique(email: string) {
-    if (
-        await AppDataSource.manager.find(User, {
-            where: {
-                email: email,
-            },
-        })
-    ) {
-        return true;
-    }
-    return false;
-}
-
 async function createEntry(
     email: UserType["email"],
     password: UserType["password"],

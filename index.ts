@@ -7,6 +7,7 @@ import userRouter from "@/routes/user.route";
 import { errorHandler } from "@/middleware/error.middleware";
 import { logger } from "@/middleware/logging.middleware";
 import { AppDataSource } from "@/models/data-source";
+import { verifyUserToken } from "@/middleware/authentication.middleware";
 
 AppDataSource.initialize()
     .then(async () => {
@@ -19,14 +20,15 @@ AppDataSource.initialize()
         app.use(logger);
         app.use(errorHandler);
 
-        app.get("/", (req, res) => {
-            res.json({ message: "ok" });
-        });
-        app.use("/joke", jokeRouter);
+        // app.get("/", (req, res) => {
+        //     res.json({ message: "ok" });
+        // });
 
         app.use("/user", userRouter);
-        app.use("/signup", userRouter);
-        app.use("/login", userRouter);
+        // app.use("/signup", userRouter);
+        // app.use("/login", userRouter);
+
+        app.use("/joke", verifyUserToken, jokeRouter);
 
         app.listen(port, () => {
             console.log(`Example app listening at http://localhost:${port}`);

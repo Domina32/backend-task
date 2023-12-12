@@ -1,40 +1,11 @@
 import { NextFunction, Response, Request } from "express";
 import userService from "@/services/user.service";
-import { User, UserType } from "@/models/entities/User";
+import { User } from "@/models/entities/User";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { AppDataSource } from "@/models/data-source";
 
 const env = process.env;
-
-async function create(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-): Promise<void> {
-    try {
-        const user: UserType = new User();
-        user.email = "email";
-        user.password = "pass";
-        user.firstName = "first name";
-        user.lastName = "last name";
-        user.signedUp = false;
-
-        res.json(user);
-        await userService.createEntry(
-            user.email,
-            user.password,
-            user.firstName,
-            user.lastName,
-            user.signedUp,
-        );
-
-        // res.json(await userService.createEntry());
-    } catch (e: unknown) {
-        console.error(`Error creating user`, (e as Error).message);
-        next(e);
-    }
-}
 
 async function login(
     req: Request,
@@ -49,11 +20,11 @@ async function login(
         if (!user) {
             res.status(401).send("No user with this email");
         } else {
-            const validPass = await bcrypt.compare(
+            const validPassword = await bcrypt.compare(
                 req.body.password,
                 user.password,
             );
-            if (!validPass) {
+            if (!validPassword) {
                 res.status(401).send("Email or password is incorrect");
                 return;
             }
@@ -63,9 +34,11 @@ async function login(
                 user_type_id: req.body.user_type_id || false,
             };
 
-            const token = jwt.sign(payload, env.TOKEN_SECRET || "secret");
+            const token = jwt.sign(payload, env.TOKEN_SECRET || "secret", {
+                expiresIn: "3s",
+            });
 
-            res.status(200).header("auth-token", token).send({ token: token });
+            res.status(200).send({ token: token }); // .header("auth-token", token)
         }
     } catch (e: unknown) {
         console.error(`Error logging in`, (e as Error).message);
@@ -112,4 +85,4 @@ async function signup(
     }
 }
 
-export default { create, login, signup };
+export default { login, signup };
