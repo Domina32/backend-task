@@ -17,3 +17,5 @@ describe("jokeService.fetchNewRandom()", () => {
         expect(fetch).toHaveBeenCalled();
     });
 });
+
+// todo createEntry()
