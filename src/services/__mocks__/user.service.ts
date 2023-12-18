@@ -10,3 +10,5 @@ const createEntry = jest.fn(
         signedUp: UserType["signedUp"],
     ) => {},
 );
+
+export default { createEntry };

@@ -1,5 +1,6 @@
 import { describe, it, expect, jest } from "@jest/globals";
 import jokeService from "@/services/joke.service";
+import { AppDataSource } from "@/models/data-source";
 
 global.fetch = jest.fn(async () => {
     const myResponse = {
@@ -10,6 +11,8 @@ global.fetch = jest.fn(async () => {
     return myResponse as Response;
 });
 
+jest.spyOn(AppDataSource.manager, "save").mockImplementation(async () => {});
+
 describe("jokeService.fetchNewRandom()", () => {
     it("should fetch new random joke", async () => {
         await jokeService.fetchNewRandom();
@@ -18,4 +21,10 @@ describe("jokeService.fetchNewRandom()", () => {
     });
 });
 
-// todo createEntry()
+describe("jokeService.createEntry()", () => {
+    it("should create new joke entry", async () => {
+        await jokeService.createEntry("mocked joke");
+
+        expect(AppDataSource.manager.save).toHaveBeenCalled();
+    });
+});

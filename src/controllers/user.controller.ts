@@ -52,7 +52,6 @@ async function signup(
     next: NextFunction,
 ): Promise<void> {
     try {
-        console.log(req.body);
         const salt = await bcrypt.genSalt(10);
         const hashPassword = await bcrypt.hash(req.body.password, salt);
 
