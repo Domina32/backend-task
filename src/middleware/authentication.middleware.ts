@@ -8,29 +8,6 @@ async function verifyUserToken(
     res: Response,
     next: NextFunction,
 ): Promise<void> {
-    // try {
-    //     const authHeader = req.headers["auth-token"];
-    //     let token = req.headers.authorization;
-
-    //     console.info("token: ", token);
-    //     console.info("auth header: ", authHeader);
-
-    //     // token = authHeader && authHeader.split(" ")[1];
-
-    //     if (token == null) {
-    //         res.status(401).send("Unauthorized request");
-    //         return;
-    //     }
-
-    //     const verifiedUser = jwt.verify(token, env.TOKEN_SECRET || "secret");
-    //     if (!verifiedUser) res.status(401).send("Unauthorized request");
-
-    //     req.body = verifiedUser;
-
-    //     console.info("in verifyUserToken() before next()");
-    //     next();
-    // }
-
     let token = req.headers.authorization;
 
     if (!token) {
@@ -39,19 +16,17 @@ async function verifyUserToken(
     }
 
     try {
-        token = token.split(" ")[1]; // Remove Bearer from string
+        token = token.split(" ")[1];
 
         if (token === "null" || !token) {
             res.status(401).send("Unauthorized request");
             return;
         }
-        let verifiedUser = jwt.verify(token, env.TOKEN_SECRET || "secret"); // config.TOKEN_SECRET => 'secretKey'
+        let verifiedUser = jwt.verify(token, env.TOKEN_SECRET);
         if (!verifiedUser) {
             res.status(401).send("Unauthorized request");
             return;
         }
-
-        // req.user = verifiedUser;
 
         req.body = verifiedUser;
 

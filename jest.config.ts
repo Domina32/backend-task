@@ -19,6 +19,8 @@ const config: JestConfigWithTsJest = {
     roots: ["./test"],
     modulePaths: [compilerOptions.baseUrl],
     moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
+
+    globalSetup: "./test/setup.ts",
 };
 
 export default config;

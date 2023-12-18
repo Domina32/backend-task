@@ -1,5 +1,6 @@
 import "module-alias/register";
 import "reflect-metadata";
+import "dotenv/config";
 import bodyParser from "body-parser";
 import express from "express";
 import jokeRouter from "@/routes/joke.route";

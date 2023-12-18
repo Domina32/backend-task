@@ -8,6 +8,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import userService from "@/services/user.service";
 
+const env = process.env;
+
 jest.mock("../../src/services/user.service");
 
 const salt = bcrypt.genSaltSync(10);
@@ -86,6 +88,14 @@ describe("userController.signup()", () => {
             "test last name",
             false,
         );
+
         expect(jwt.sign).toHaveBeenCalled();
+
+        const payload = { id: 5 };
+        console.log(process.env);
+
+        const token = jwt.sign(payload, env.TOKEN_SECRET);
+
+        expect(jwt.sign).lastReturnedWith(token);
     });
 });

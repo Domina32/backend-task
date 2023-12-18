@@ -31,14 +31,13 @@ async function login(
 
             let payload = {
                 id: user.id,
-                user_type_id: req.body.user_type_id || false,
             };
 
-            const token = jwt.sign(payload, env.TOKEN_SECRET || "secret", {
+            const token = jwt.sign(payload, env.TOKEN_SECRET, {
                 expiresIn: "3s",
             });
 
-            res.status(200).send({ token: token }); // .header("auth-token", token)
+            res.status(200).send({ token: token });
         }
     } catch (e: unknown) {
         console.error(`Error logging in`, (e as Error).message);
@@ -72,10 +71,9 @@ async function signup(
 
         let payload = {
             id: user.id,
-            user_type_id: req.body.user_type_id || false,
         };
 
-        const token = jwt.sign(payload, env.TOKEN_SECRET || "secret");
+        const token = jwt.sign(payload, env.TOKEN_SECRET);
 
         res.status(200).send({ token });
     } catch (e: unknown) {
