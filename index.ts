@@ -9,7 +9,7 @@ import { logger } from "@/middleware/logging.middleware";
 import { AppDataSource } from "@/models/data-source";
 import { verifyUserToken } from "@/middleware/authentication.middleware";
 
-AppDataSource.initialize()
+export const serverPromise = AppDataSource.initialize()
     .then(async () => {
         const app = express();
         const port = process.env.PORT || 3000;

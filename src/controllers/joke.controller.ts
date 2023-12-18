@@ -38,7 +38,7 @@ async function create(
     try {
         const joke = res.json();
 
-        // res.json(await jokeService.createEntry());
+        //res.json(await jokeService.createEntry());
     } catch (e: unknown) {
         console.error(`Error creating joke`, (e as Error).message);
         next(e);
