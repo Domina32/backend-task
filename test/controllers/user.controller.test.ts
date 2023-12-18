@@ -41,11 +41,12 @@ describe("userController.login()", () => {
             body: { email: "FindTest@email.com", password: "test password" },
         } as Request;
         const res = {
-            status: (s) => {
+            status: jest.fn((s) => {
                 return res;
-            },
-            send: () => {},
-        } as Response;
+            }),
+            send: jest.fn(() => {}),
+        } as unknown as Response;
+
         const next = (() => {}) as NextFunction;
 
         await userController.login(req, res, next);
@@ -58,6 +59,8 @@ describe("userController.login()", () => {
             hashedPassword,
         );
         expect(jwt.sign).toHaveBeenCalled();
+
+        expect(res.status).toBeCalledWith(200);
     });
 
     it("should fail login when given email is not found in db", async () => {
@@ -71,11 +74,11 @@ describe("userController.login()", () => {
             body: { email: "invalid@email.com", password: "test password" },
         } as Request;
         const res = {
-            status: (s) => {
+            status: jest.fn((s) => {
                 return res;
-            },
-            send: () => {},
-        } as Response;
+            }),
+            send: jest.fn(() => {}),
+        } as unknown as Response;
         const next = (() => {}) as NextFunction;
 
         await userController.login(req, res, next);
@@ -83,6 +86,8 @@ describe("userController.login()", () => {
         expect(AppDataSource.manager.findOneBy).toHaveBeenCalledWith(User, {
             email: "invalid@email.com",
         });
+
+        expect(res.status).toBeCalledWith(401);
     });
 
     it("should fail login when given password is incorrect", async () => {
@@ -102,11 +107,11 @@ describe("userController.login()", () => {
             body: { email: "FindTest@email.com", password: "wrong password" },
         } as Request;
         const res = {
-            status: (s) => {
+            status: jest.fn((s) => {
                 return res;
-            },
-            send: () => {},
-        } as Response;
+            }),
+            send: jest.fn(() => {}),
+        } as unknown as Response;
         const next = (() => {}) as NextFunction;
 
         await userController.login(req, res, next);
@@ -119,6 +124,8 @@ describe("userController.login()", () => {
             "wrong password",
             hashedPassword,
         );
+
+        expect(res.status).toBeCalledWith(401);
     });
 });
 
@@ -134,11 +141,11 @@ describe("userController.signup()", () => {
             },
         } as Request;
         const res = {
-            status: (s) => {
+            status: jest.fn((s) => {
                 return res;
-            },
-            send: () => {},
-        } as Response;
+            }),
+            send: jest.fn(() => {}),
+        } as unknown as Response;
         const next = (() => {}) as NextFunction;
 
         await userController.signup(req, res, next);
@@ -159,5 +166,7 @@ describe("userController.signup()", () => {
         const token = jwt.sign(payload, env.TOKEN_SECRET);
 
         expect(jwt.sign).lastReturnedWith(token);
+
+        expect(res.status).toBeCalledWith(200);
     });
 });
