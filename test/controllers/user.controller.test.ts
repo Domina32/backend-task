@@ -15,17 +15,7 @@ jest.mock("../../src/services/user.service");
 const salt = bcrypt.genSaltSync(10);
 const hashedPassword = bcrypt.hashSync("test password", salt);
 
-jest.spyOn(AppDataSource.manager, "findOneBy").mockImplementation(
-    async (): Promise<ObjectLiteral | null> => {
-        return {
-            email: "FindTest@email.com",
-            password: hashedPassword,
-            firstName: "test first name",
-            lastName: "test last name",
-            signedUp: true,
-        };
-    },
-);
+const mockedFindOneBy = jest.spyOn(AppDataSource.manager, "findOneBy");
 
 jest.spyOn(bcrypt, "compare");
 jest.spyOn(bcrypt, "hash");
@@ -34,7 +24,19 @@ jest.spyOn(bcrypt, "genSalt").mockImplementation(() => salt);
 jest.spyOn(jwt, "sign");
 
 describe("userController.login()", () => {
-    it("should log in an existing user", async () => {
+    it("should log in an existing user with valid credentials", async () => {
+        mockedFindOneBy.mockImplementation(
+            async (): Promise<ObjectLiteral | null> => {
+                return {
+                    email: "FindTest@email.com",
+                    password: hashedPassword,
+                    firstName: "test first name",
+                    lastName: "test last name",
+                    signedUp: true,
+                };
+            },
+        );
+
         const req = {
             body: { email: "FindTest@email.com", password: "test password" },
         } as Request;
@@ -56,6 +58,67 @@ describe("userController.login()", () => {
             hashedPassword,
         );
         expect(jwt.sign).toHaveBeenCalled();
+    });
+
+    it("should fail login when given email is not found in db", async () => {
+        mockedFindOneBy.mockImplementation(
+            async (): Promise<ObjectLiteral | null> => {
+                return null;
+            },
+        );
+
+        const req = {
+            body: { email: "invalid@email.com", password: "test password" },
+        } as Request;
+        const res = {
+            status: (s) => {
+                return res;
+            },
+            send: () => {},
+        } as Response;
+        const next = (() => {}) as NextFunction;
+
+        await userController.login(req, res, next);
+
+        expect(AppDataSource.manager.findOneBy).toHaveBeenCalledWith(User, {
+            email: "invalid@email.com",
+        });
+    });
+
+    it("should fail login when given password is incorrect", async () => {
+        mockedFindOneBy.mockImplementation(
+            async (): Promise<ObjectLiteral | null> => {
+                return {
+                    email: "FindTest@email.com",
+                    password: hashedPassword,
+                    firstName: "test first name",
+                    lastName: "test last name",
+                    signedUp: true,
+                };
+            },
+        );
+
+        const req = {
+            body: { email: "FindTest@email.com", password: "wrong password" },
+        } as Request;
+        const res = {
+            status: (s) => {
+                return res;
+            },
+            send: () => {},
+        } as Response;
+        const next = (() => {}) as NextFunction;
+
+        await userController.login(req, res, next);
+
+        expect(AppDataSource.manager.findOneBy).toHaveBeenCalledWith(User, {
+            email: "FindTest@email.com",
+        });
+
+        expect(bcrypt.compare).toHaveBeenCalledWith(
+            "wrong password",
+            hashedPassword,
+        );
     });
 });
 
@@ -92,7 +155,6 @@ describe("userController.signup()", () => {
         expect(jwt.sign).toHaveBeenCalled();
 
         const payload = { id: 5 };
-        console.log(process.env);
 
         const token = jwt.sign(payload, env.TOKEN_SECRET);
 

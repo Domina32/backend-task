@@ -37,7 +37,7 @@ async function login(
                 expiresIn: "3s",
             });
 
-            res.status(200).send({ token: token });
+            res.status(200).send({ token });
         }
     } catch (e: unknown) {
         console.error(`Error logging in`, (e as Error).message);
