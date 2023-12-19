@@ -11,7 +11,6 @@ describe("userService.createEntry()", () => {
             "test password",
             "test first name",
             "test last name",
-            true,
         );
 
         expect(AppDataSource.manager.save).toHaveBeenCalled();

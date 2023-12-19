@@ -1,11 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-export interface UserType {
+export interface UserDto {
+    id: number;
     email: string;
     password: string;
     firstName: string;
     lastName: string;
-    signedUp: boolean;
 }
+
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
@@ -22,7 +23,4 @@ export class User {
 
     @Column()
     lastName: string;
-
-    @Column()
-    signedUp: boolean;
 }

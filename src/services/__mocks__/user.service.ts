@@ -1,14 +1,21 @@
 import { jest } from "@jest/globals";
-import { UserType } from "@/models/entities/User";
+import { UserDto } from "@/models/entities/User";
 
 const createEntry = jest.fn(
     async (
-        email: UserType["email"],
-        password: UserType["password"],
-        firstName: UserType["firstName"],
-        lastName: UserType["lastName"],
-        signedUp: UserType["signedUp"],
-    ) => {},
+        email: UserDto["email"],
+        password: UserDto["password"],
+        firstName: UserDto["firstName"],
+        lastName: UserDto["lastName"],
+    ) => {
+        return {
+            id: 5,
+            email: "FindTest@email.com",
+            password: "test password",
+            firstName: "test first name",
+            lastName: "test last name",
+        };
+    },
 );
 
 export default { createEntry };

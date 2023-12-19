@@ -7,5 +7,4 @@ export class MockUser {
     password: string;
     firstName: string;
     lastName: string;
-    signedUp: boolean;
 }

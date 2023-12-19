@@ -32,7 +32,6 @@ describe("userController.login()", () => {
                     password: hashedPassword,
                     firstName: "test first name",
                     lastName: "test last name",
-                    signedUp: true,
                 };
             },
         );
@@ -98,7 +97,6 @@ describe("userController.login()", () => {
                     password: hashedPassword,
                     firstName: "test first name",
                     lastName: "test last name",
-                    signedUp: true,
                 };
             },
         );
@@ -137,7 +135,6 @@ describe("userController.signup()", () => {
                 password: "test password",
                 firstName: "test first name",
                 lastName: "test last name",
-                signedUp: false,
             },
         } as Request;
         const res = {
@@ -156,7 +153,6 @@ describe("userController.signup()", () => {
             hashedPassword,
             "test first name",
             "test last name",
-            false,
         );
 
         expect(jwt.sign).toHaveBeenCalled();

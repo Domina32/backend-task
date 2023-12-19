@@ -54,19 +54,11 @@ async function signup(
         const salt = await bcrypt.genSalt(10);
         const hashPassword = await bcrypt.hash(req.body.password, salt);
 
-        const user = new User();
-        user.email = req.body.email;
-        user.password = hashPassword;
-        user.firstName = req.body.firstName;
-        user.lastName = req.body.lastName;
-        user.signedUp = req.body.signedUp || false;
-
-        await userService.createEntry(
-            user.email,
-            user.password,
-            user.firstName,
-            user.lastName,
-            user.signedUp,
+        const user = await userService.createEntry(
+            req.body.email,
+            hashPassword,
+            req.body.firstName,
+            req.body.lastName,
         );
 
         let payload = {

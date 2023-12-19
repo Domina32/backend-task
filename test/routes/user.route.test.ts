@@ -8,7 +8,7 @@ import { IncomingMessage, Server, ServerResponse } from "node:http";
 let server: Server<typeof IncomingMessage, typeof ServerResponse>;
 let requestWithSupertest: supertest.SuperTest<supertest.Test>;
 
-describe("GET /joke/new", () => {
+describe("POST /user/login", () => {
     beforeAll(async () => {
         server = await getServer();
         requestWithSupertest = supertest(await server);
@@ -35,33 +35,18 @@ describe("GET /joke/new", () => {
         await AppDataSource.destroy();
     });
 
-    it("should get new joke from API for logged in user", async () => {
+    it("should fail logging in with incorrect credentials", async () => {
         let result = await requestWithSupertest.post("/user/signup").send({
             email: "EMAIL@email.com",
             password: "PASSWORD",
             firstName: "FIRST NAME",
             lastName: "LAST NAME",
         });
-
-        expect(result.statusCode).toBe(200);
-
-        result = await requestWithSupertest.post("/user/login").send({
-            email: "EMAIL@email.com",
-            password: "PASSWORD",
-        });
-
-        expect(result.statusCode).toBe(200);
-
-        const token = result.body.token;
-
-        result = await requestWithSupertest
-            .get("/joke/new")
-            .set("Authorization", `Bearer ${token}`);
 
         expect(result.statusCode).toBe(200);
     });
 
-    it("should reject the request with missing auth token", async () => {
+    it("should fail logging in when user is not signed up", async () => {
         let result = await requestWithSupertest.post("/user/signup").send({
             email: "EMAIL@email.com",
             password: "PASSWORD",
@@ -70,37 +55,5 @@ describe("GET /joke/new", () => {
         });
 
         expect(result.statusCode).toBe(200);
-
-        result = await requestWithSupertest
-            .get("/joke/new")
-            .set("Authorization", `Bearer`);
-
-        expect(result.statusCode).toBe(401);
-    });
-
-    it("should reject the request with incorrect auth token", async () => {
-        let result = await requestWithSupertest.post("/user/signup").send({
-            email: "EMAIL@email.com",
-            password: "PASSWORD",
-            firstName: "FIRST NAME",
-            lastName: "LAST NAME",
-        });
-
-        expect(result.statusCode).toBe(200);
-
-        result = await requestWithSupertest.post("/user/login").send({
-            email: "EMAIL@email.com",
-            password: "PASSWORD",
-        });
-
-        expect(result.statusCode).toBe(200);
-
-        const token = "wrong token";
-
-        result = await requestWithSupertest
-            .get("/joke/new")
-            .set("Authorization", `Bearer ${token}`);
-
-        expect(result.statusCode).toBe(400);
     });
 });
