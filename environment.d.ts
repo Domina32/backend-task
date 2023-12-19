@@ -10,6 +10,9 @@ declare global {
             DB_NAME: string;
 
             TOKEN_SECRET: string;
+
+            DB_NAME_TEST: string;
+            NODE_ENV: "test" | "development" | "production";
         }
     }
 }

@@ -4,6 +4,8 @@ import { Joke } from "@/models/entities/Joke";
 import { User } from "@/models/entities/User";
 import dbConfig from "@/configs/db.config";
 
+const env = process.env;
+
 export const AppDataSource = new DataSource({
     type: "postgres",
     host: dbConfig.host,
@@ -16,4 +18,5 @@ export const AppDataSource = new DataSource({
     entities: [Joke, User],
     migrations: [],
     subscribers: [],
+    dropSchema: env.NODE_ENV == "test" ? true : false,
 });

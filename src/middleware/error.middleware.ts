@@ -10,7 +10,6 @@ export const errorHandler = (
     res: Response,
     next: NextFunction,
 ): void => {
-    console.log("Wait a second");
     const statusCode = err.statusCode || 500;
     console.error(err.message, err.stack);
     res.status(statusCode).json({ message: err.message });

@@ -10,9 +10,11 @@ import { logger } from "@/middleware/logging.middleware";
 import { AppDataSource } from "@/models/data-source";
 import { verifyUserToken } from "@/middleware/authentication.middleware";
 
-export const serverPromise = AppDataSource.initialize()
-    .then(async () => {
-        const app = express();
+const getServer = async () => {
+    const app = express();
+
+    try {
+        await AppDataSource.initialize();
         const port = process.env.PORT || 3000;
 
         app.use(bodyParser.json());
@@ -26,15 +28,17 @@ export const serverPromise = AppDataSource.initialize()
         // });
 
         app.use("/user", userRouter);
-        // app.use("/signup", userRouter);
-        // app.use("/login", userRouter);
 
         app.use("/joke", verifyUserToken, jokeRouter);
 
-        app.listen(port, () => {
+        const server = app.listen(port, () => {
             console.log(`Example app listening at http://localhost:${port}`);
         });
-    })
-    .catch((e) => {
-        console.error("Error during Data Source initialization:", e.message);
-    });
+
+        return server;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export { getServer };
