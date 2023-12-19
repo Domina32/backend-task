@@ -62,7 +62,7 @@ describe("userController.login()", () => {
         expect(res.status).toBeCalledWith(200);
     });
 
-    it("should fail login when given email is not found in db", async () => {
+    it("should fail login when given email which cannot be found in db", async () => {
         mockedFindOneBy.mockImplementation(
             async (): Promise<ObjectLiteral | null> => {
                 return null;

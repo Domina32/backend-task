@@ -15,15 +15,8 @@ export class Joke {
 }
 
 export async function insert(value: string) {
-    console.log("insert:", value);
     const joke = new Joke();
     joke.value = value;
 
-    await AppDataSource.manager.save(joke);
-
-    await AppDataSource.createQueryBuilder()
-        .insert()
-        .into(Joke)
-        .values([{ value: value }])
-        .execute();
+    await AppDataSource.manager.save(Joke, joke);
 }

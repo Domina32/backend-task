@@ -22,11 +22,8 @@ async function verifyUserToken(
             res.status(401).send("Unauthorized request");
             return;
         }
+
         let verifiedUser = jwt.verify(token, env.TOKEN_SECRET);
-        if (!verifiedUser) {
-            res.status(401).send("Unauthorized request");
-            return;
-        }
 
         req.body = verifiedUser;
 

@@ -13,7 +13,7 @@ async function getEntries(): Promise<void> {}
 async function createEntry(text: JokeType["value"]): Promise<void> {
     const joke = new Joke();
     joke.value = text;
-    AppDataSource.manager.save(joke);
+    AppDataSource.manager.save(Joke, joke);
 }
 
 // TODO

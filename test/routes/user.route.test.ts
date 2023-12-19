@@ -35,6 +35,7 @@ describe("POST /user/login", () => {
         await AppDataSource.destroy();
     });
 
+    //TODO
     it("should fail logging in with incorrect credentials", async () => {
         let result = await requestWithSupertest.post("/user/signup").send({
             email: "EMAIL@email.com",
@@ -46,6 +47,7 @@ describe("POST /user/login", () => {
         expect(result.statusCode).toBe(200);
     });
 
+    //TODO
     it("should fail logging in when user is not signed up", async () => {
         let result = await requestWithSupertest.post("/user/signup").send({
             email: "EMAIL@email.com",
