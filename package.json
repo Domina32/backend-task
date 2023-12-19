@@ -5,7 +5,8 @@
     "main": "index.js",
     "scripts": {
         "dev": "rm -rf ./dist/* && tsc-watch --onSuccess \"node ./dist/index.js\"",
-        "test": "jest -i .route.test",
+        "test": "jest -i",
+        "test-integration": "jest -i .route.test",
         "test-unit": "jest --testMatch \"**/test/**/*.test.ts\" \"!**/test/**/*.route.*\"",
         "lint": "eslint --fix ./src/**/*",
         "format": "prettier --write ./src/**/*",
