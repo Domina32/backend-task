@@ -23,10 +23,6 @@ const getServer = async () => {
         app.use(logger);
         app.use(errorHandler);
 
-        // app.get("/", (req, res) => {
-        //     res.json({ message: "ok" });
-        // });
-
         app.use("/user", userRouter);
 
         app.use("/joke", verifyUserToken, jokeRouter);
@@ -40,5 +36,7 @@ const getServer = async () => {
         throw error;
     }
 };
+
+getServer();
 
 export { getServer };

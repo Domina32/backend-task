@@ -11,6 +11,9 @@ declare global {
 
             TOKEN_SECRET: string;
 
+            EMAIL_SENDER: string;
+            APP_PASSWORD: string;
+
             DB_NAME_TEST: string;
             NODE_ENV: "test" | "development" | "production";
         }

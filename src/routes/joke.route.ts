@@ -4,8 +4,6 @@ const router = express.Router();
 
 router.get("/new", jokeController.fetchNew);
 
-router.get("/", jokeController.getHistory);
-
-router.post("/", jokeController.create);
+router.get("/history", jokeController.getHistory);
 
 export default router;

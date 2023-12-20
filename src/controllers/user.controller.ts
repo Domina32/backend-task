@@ -29,13 +29,11 @@ async function login(
                 return;
             }
 
-            let payload = {
+            const payload = {
                 id: user.id,
             };
 
-            const token = jwt.sign(payload, env.TOKEN_SECRET, {
-                expiresIn: "3s",
-            });
+            const token = jwt.sign(payload, env.TOKEN_SECRET);
 
             res.status(200).send({ token });
         }

@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    JoinTable,
+    ManyToMany,
+} from "typeorm";
+import { Joke } from "./Joke";
 export interface UserDto {
     id: number;
     email: string;

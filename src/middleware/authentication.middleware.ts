@@ -1,10 +1,17 @@
 import { NextFunction, Response, Request } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 const env = process.env;
 
+export interface UserAuthRequest extends Request {
+    user?: {
+        id?: number;
+        iat?: number;
+    };
+}
+
 async function verifyUserToken(
-    req: Request,
+    req: UserAuthRequest,
     res: Response,
     next: NextFunction,
 ): Promise<void> {
@@ -24,8 +31,11 @@ async function verifyUserToken(
         }
 
         let verifiedUser = jwt.verify(token, env.TOKEN_SECRET);
-
-        req.body = verifiedUser;
+        if (typeof verifiedUser === "string") {
+            throw new Error("invalid token payload");
+        } else {
+            req.user = verifiedUser;
+        }
 
         next();
     } catch (error) {

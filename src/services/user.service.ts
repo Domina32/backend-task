@@ -23,4 +23,12 @@ async function createEntry(
     return user;
 }
 
-export default { createEntry };
+async function getEntry(id: UserDto["id"]): Promise<UserDto | null> {
+    const user = await AppDataSource.manager.findOneBy(User, {
+        id: id,
+    });
+
+    return user;
+}
+
+export default { createEntry, getEntry };
