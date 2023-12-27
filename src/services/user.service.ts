@@ -1,4 +1,5 @@
 import { AppDataSource } from "@/models/data-source";
+import { Joke, JokeType } from "@/models/entities/Joke";
 import { User, UserDto } from "@/models/entities/User";
 
 const validateEmail = (email: string): boolean => {
@@ -23,12 +24,31 @@ async function createEntry(
     return user;
 }
 
+async function assignJokeToUser(joke: Joke, user: User): Promise<void> {
+    const userJokes = user.jokes || [];
+    const jokeUsers = joke.users || [];
+
+    jokeUsers.push(user);
+    userJokes.push({ ...joke, users: jokeUsers });
+
+    user.jokes = userJokes;
+
+    const test = await AppDataSource.manager.save(User, user);
+
+    console.log(test);
+}
+
 async function getEntry(id: UserDto["id"]): Promise<UserDto | null> {
-    const user = await AppDataSource.manager.findOneBy(User, {
-        id: id,
+    const user = await AppDataSource.manager.findOne(User, {
+        where: {
+            id,
+        },
+        relations: {
+            jokes: true,
+        },
     });
 
     return user;
 }
 
-export default { createEntry, getEntry };
+export default { createEntry, getEntry, assignJokeToUser };

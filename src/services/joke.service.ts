@@ -1,5 +1,6 @@
 import { AppDataSource } from "@/models/data-source";
 import { Joke, JokeType } from "@/models/entities/Joke";
+import { User, UserDto } from "@/models/entities/User";
 
 async function fetchNewRandom(): Promise<JokeType> {
     const response = await fetch("https://api.chucknorris.io/jokes/random");
@@ -7,13 +8,25 @@ async function fetchNewRandom(): Promise<JokeType> {
     return response.json();
 }
 
-// TODO
-async function getEntries(): Promise<void> {}
+async function getEntries(userId: UserDto["id"]): Promise<Joke[]> {
+    const user = await AppDataSource.manager.findOne(User, {
+        where: {
+            id: userId,
+        },
+        relations: {
+            jokes: true,
+        },
+    });
 
-async function createEntry(text: JokeType["value"]): Promise<void> {
+    console.log(user);
+
+    return user?.jokes || [];
+}
+
+async function createEntry(text: JokeType["value"]): Promise<JokeType> {
     const joke = new Joke();
     joke.value = text;
-    AppDataSource.manager.save(Joke, joke);
+    return AppDataSource.manager.save(Joke, joke);
 }
 
 // TODO

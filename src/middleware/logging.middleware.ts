@@ -6,6 +6,7 @@ export const logger = (
     next: NextFunction,
 ): void => {
     console.log(`${req.method} ${req.path}`);
+    console.log(`query: ${JSON.stringify(req.query)}`);
 
     next();
 

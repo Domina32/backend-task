@@ -6,6 +6,7 @@ import {
     ManyToMany,
 } from "typeorm";
 import { Joke } from "./Joke";
+// import { Joke } from "./Joke";
 export interface UserDto {
     id: number;
     email: string;
@@ -30,4 +31,11 @@ export class User {
 
     @Column()
     lastName: string;
+
+    @ManyToMany(() => Joke, (joke) => joke.users, {
+        onDelete: "NO ACTION",
+        onUpdate: "NO ACTION",
+    })
+    @JoinTable()
+    jokes?: Joke[];
 }

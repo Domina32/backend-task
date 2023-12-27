@@ -13,7 +13,7 @@ async function fetchNew(
         const joke = await jokeService.fetchNewRandom();
 
         res.json(joke);
-        await jokeService.createEntry(joke.value);
+        const dbJoke = await jokeService.createEntry(joke.value);
 
         if (!req.user?.id) {
             throw new Error("missing user id");
@@ -30,13 +30,14 @@ async function fetchNew(
             { subject: "Incoming joke", text: joke.value },
             { emailAddress: recipient.email },
         );
+
+        userService.assignJokeToUser(dbJoke, recipient);
     } catch (e: unknown) {
         console.error(`Error getting new joke from API`, (e as Error).message);
         next(e);
     }
 }
 
-// TODO
 async function getHistory(
     req: UserAuthRequest,
     res: Response,
@@ -49,7 +50,7 @@ async function getHistory(
 
         const userId = req.user.id;
 
-        res.json(await jokeService.getEntries());
+        res.json(await jokeService.getEntries(userId));
     } catch (e: unknown) {
         console.error(`Error getting joke`, (e as Error).message);
         next(e);
