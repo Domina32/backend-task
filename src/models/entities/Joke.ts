@@ -8,7 +8,7 @@ import {
 import { AppDataSource } from "@/models/data-source";
 import { User } from "./User";
 
-export interface JokeType {
+export interface JokeDto {
     id: number;
     value: string;
 }
@@ -26,11 +26,4 @@ export class Joke {
         onUpdate: "NO ACTION",
     })
     users?: User[];
-}
-
-export async function insert(value: string) {
-    const joke = new Joke();
-    joke.value = value;
-
-    await AppDataSource.manager.save(Joke, joke);
 }

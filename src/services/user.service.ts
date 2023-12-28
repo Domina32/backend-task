@@ -1,5 +1,5 @@
 import { AppDataSource } from "@/models/data-source";
-import { Joke, JokeType } from "@/models/entities/Joke";
+import { Joke, JokeDto } from "@/models/entities/Joke";
 import { User, UserDto } from "@/models/entities/User";
 
 const validateEmail = (email: string): boolean => {
@@ -33,9 +33,7 @@ async function assignJokeToUser(joke: Joke, user: User): Promise<void> {
 
     user.jokes = userJokes;
 
-    const test = await AppDataSource.manager.save(User, user);
-
-    console.log(test);
+    await AppDataSource.manager.save(User, user);
 }
 
 async function getEntry(id: UserDto["id"]): Promise<UserDto | null> {

@@ -18,5 +18,5 @@ export const AppDataSource = new DataSource({
     entities: [Joke, User],
     migrations: [],
     subscribers: [],
-    dropSchema: env.NODE_ENV == "test" ? true : false,
+    dropSchema: env.NODE_ENV === "test" ? true : false,
 });

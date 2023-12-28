@@ -6,7 +6,7 @@ import {
     ManyToMany,
 } from "typeorm";
 import { Joke } from "./Joke";
-// import { Joke } from "./Joke";
+
 export interface UserDto {
     id: number;
     email: string;

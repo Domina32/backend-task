@@ -37,6 +37,8 @@ const getServer = async () => {
     }
 };
 
-getServer();
+if (process.env.NODE_ENV !== "test") {
+    getServer();
+}
 
 export { getServer };

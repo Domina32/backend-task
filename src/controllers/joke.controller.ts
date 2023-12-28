@@ -26,7 +26,7 @@ async function fetchNew(
             throw new Error("no user with given id");
         }
 
-        sendEmail(
+        await sendEmail(
             { subject: "Incoming joke", text: joke.value },
             { emailAddress: recipient.email },
         );

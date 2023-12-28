@@ -1,6 +1,7 @@
 import { describe, it, expect, jest } from "@jest/globals";
 import jokeService from "@/services/joke.service";
 import { AppDataSource } from "@/models/data-source";
+import { User } from "@/models/entities/User";
 
 global.fetch = jest.fn(async () => {
     const myResponse = {
@@ -12,6 +13,9 @@ global.fetch = jest.fn(async () => {
 });
 
 jest.spyOn(AppDataSource.manager, "save").mockImplementation(async () => {});
+jest.spyOn(AppDataSource.manager, "findOne").mockImplementation(async () => {
+    return null;
+});
 
 describe("jokeService.fetchNewRandom()", () => {
     it("should fetch new random joke", async () => {
@@ -26,5 +30,20 @@ describe("jokeService.createEntry()", () => {
         await jokeService.createEntry("mocked joke");
 
         expect(AppDataSource.manager.save).toHaveBeenCalled();
+    });
+});
+
+describe("jokeService.getEntries()", () => {
+    it("should get jokes for given user id", async () => {
+        await jokeService.getEntries(100);
+
+        expect(AppDataSource.manager.findOne).toHaveBeenCalledWith(User, {
+            where: {
+                id: 100,
+            },
+            relations: {
+                jokes: true,
+            },
+        });
     });
 });
