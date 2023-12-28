@@ -34,8 +34,24 @@ describe("POST /user/login", () => {
     afterEach(async () => {
         await AppDataSource.destroy();
     });
+    it("should log the user in", async () => {
+        let result = await requestWithSupertest.post("/user/signup").send({
+            email: "EMAIL@email.com",
+            password: "PASSWORD",
+            firstName: "FIRST NAME",
+            lastName: "LAST NAME",
+        });
 
-    //TODO
+        expect(result.statusCode).toBe(200);
+
+        result = await requestWithSupertest.post("/user/login").send({
+            email: "EMAIL@email.com",
+            password: "PASSWORD",
+        });
+
+        expect(result.statusCode).toBe(200);
+    });
+
     it("should fail logging in with incorrect credentials", async () => {
         let result = await requestWithSupertest.post("/user/signup").send({
             email: "EMAIL@email.com",
@@ -45,17 +61,28 @@ describe("POST /user/login", () => {
         });
 
         expect(result.statusCode).toBe(200);
-    });
 
-    //TODO
-    it("should fail logging in when user is not signed up", async () => {
-        let result = await requestWithSupertest.post("/user/signup").send({
-            email: "EMAIL@email.com",
+        result = await requestWithSupertest.post("/user/login").send({
+            email: "wrongEMAIL@email.com",
             password: "PASSWORD",
-            firstName: "FIRST NAME",
-            lastName: "LAST NAME",
         });
 
-        expect(result.statusCode).toBe(200);
+        expect(result.statusCode).toBe(401);
+
+        result = await requestWithSupertest.post("/user/login").send({
+            email: "EMAIL@email.com",
+            password: "wrongPASSWORD",
+        });
+
+        expect(result.statusCode).toBe(401);
+    });
+
+    it("should fail logging in when user is not signed up", async () => {
+        const result = await requestWithSupertest.post("/user/login").send({
+            email: "wrongEMAIL@email.com",
+            password: "PASSWORD",
+        });
+
+        expect(result.statusCode).toBe(401);
     });
 });

@@ -1,11 +1,4 @@
-import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    ManyToMany,
-    JoinTable,
-} from "typeorm";
-import { AppDataSource } from "@/models/data-source";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from "typeorm";
 import { User } from "./User";
 
 export interface JokeDto {
