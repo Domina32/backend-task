@@ -27,16 +27,8 @@ async function createEntry(text: JokeDto["value"]): Promise<JokeDto> {
     return AppDataSource.manager.save(Joke, joke);
 }
 
-// TODO
-async function updateEntry(): Promise<void> {}
-
-// TODO
-async function removeEntry(): Promise<void> {}
-
 export default {
     fetchNewRandom,
     getEntries,
     createEntry,
-    updateEntry,
-    removeEntry,
 };
