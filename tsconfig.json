@@ -5,7 +5,7 @@
         "rootDir": "./",
         "moduleResolution": "Node16",
         "baseUrl": "./src",
-        "types": [],
+        "types": ["node"],
         "paths": {
             "@/*": ["*"]
         },

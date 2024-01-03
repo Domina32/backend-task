@@ -10,7 +10,10 @@
         "test-unit": "jest --testMatch \"**/test/**/*.test.ts\" \"!**/test/**/*.route.*\"",
         "lint": "eslint --fix ./src/**/*",
         "format": "prettier --write ./src/**/*",
-        "typeorm": "typeorm-ts-node-commonjs"
+        "typeorm": "npm config set script-shell \"/bin/bash\"; source .env && typeorm-ts-node-commonjs",
+        "typeorm:drop": "npm config set script-shell \"/bin/bash\"; source .env && typeorm-ts-node-commonjs schema:drop -d ./src/models/data-source.ts",
+        "migrations:run": "npm config set script-shell \"/bin/bash\"; source .env && typeorm-ts-node-commonjs migration:run -d ./src/models/data-source.ts",
+        "migrations:generate": "npm config set script-shell \"/bin/bash\"; source .env && typeorm-ts-node-commonjs migration:generate -d ./src/models/data-source.ts"
     },
     "author": "",
     "dependencies": {

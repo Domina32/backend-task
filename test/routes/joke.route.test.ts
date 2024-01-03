@@ -11,7 +11,7 @@ let requestWithSupertest: supertest.SuperTest<supertest.Test>;
 describe("GET /joke/new", () => {
     beforeAll(async () => {
         server = await getServer();
-        requestWithSupertest = supertest(await server);
+        requestWithSupertest = supertest(server);
     });
 
     afterAll(async () => {
@@ -59,6 +59,7 @@ describe("GET /joke/new", () => {
             .set("Authorization", `Bearer ${token}`);
 
         expect(result.statusCode).toBe(200);
+        expect(result.body).toHaveProperty("value");
     });
 
     it("should reject the request with missing auth token", async () => {
@@ -102,5 +103,38 @@ describe("GET /joke/new", () => {
             .set("Authorization", `Bearer ${token}`);
 
         expect(result.statusCode).toBe(400);
+    });
+
+    it("should get all previously fetched jokes for currently logged in user", async () => {
+        let result = await requestWithSupertest.post("/user/signup").send({
+            email: "EMAIL@email.com",
+            password: "PASSWORD",
+            firstName: "FIRST NAME",
+            lastName: "LAST NAME",
+        });
+
+        expect(result.statusCode).toBe(200);
+
+        result = await requestWithSupertest.post("/user/login").send({
+            email: "EMAIL@email.com",
+            password: "PASSWORD",
+        });
+
+        expect(result.statusCode).toBe(200);
+
+        const token = result.body.token;
+
+        result = await requestWithSupertest
+            .get("/joke/new")
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(result.statusCode).toBe(200);
+
+        result = await requestWithSupertest
+            .get("/joke/history")
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(result.statusCode).toBe(200);
+        expect(result.body.length).toBeGreaterThan(0);
     });
 });

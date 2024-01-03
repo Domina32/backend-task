@@ -12,7 +12,6 @@ async function fetchNew(
     try {
         const joke = await jokeService.fetchNewRandom();
 
-        res.json(joke);
         const dbJoke = await jokeService.createEntry(joke.value);
 
         if (!req.user?.id) {
@@ -31,7 +30,8 @@ async function fetchNew(
             { emailAddress: recipient.email },
         );
 
-        userService.assignJokeToUser(dbJoke, recipient);
+        await userService.assignJokeToUser(dbJoke, recipient);
+        res.json(joke);
     } catch (e: unknown) {
         console.error(`Error getting new joke from API`, (e as Error).message);
         next(e);

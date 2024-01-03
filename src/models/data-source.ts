@@ -1,8 +1,8 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { Joke } from "@/models/entities/Joke";
-import { User } from "@/models/entities/User";
-import dbConfig from "@/configs/db.config";
+import { Joke } from "./entities/Joke";
+import { User } from "./entities/User";
+import dbConfig from "../configs/db.config";
 
 const env = process.env;
 
@@ -16,7 +16,7 @@ export const AppDataSource = new DataSource({
     synchronize: true,
     logging: false,
     entities: [Joke, User],
-    migrations: [],
+    migrations: ["src/models/migrations/**/*.ts"],
     subscribers: [],
     dropSchema: env.NODE_ENV === "test" ? true : false,
 });
