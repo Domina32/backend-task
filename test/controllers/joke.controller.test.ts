@@ -6,6 +6,7 @@ import { UserAuthRequest } from "@/middleware/authentication.middleware";
 
 jest.mock("../../src/services/joke.service");
 jest.mock("../../src/services/user.service");
+jest.mock("../../src/services/email.service");
 
 describe("joke.controller.fetchNew()", () => {
     it("should fetch new joke", async () => {

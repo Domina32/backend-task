@@ -8,6 +8,8 @@ import { IncomingMessage, Server, ServerResponse } from "node:http";
 let server: Server<typeof IncomingMessage, typeof ServerResponse>;
 let requestWithSupertest: supertest.SuperTest<supertest.Test>;
 
+jest.mock("../../src/services/email.service");
+
 describe("POST /user/login", () => {
     beforeAll(async () => {
         server = await getServer();

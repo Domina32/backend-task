@@ -14,6 +14,9 @@ const sendEmail = async (
     email: { subject?: string; text: string },
     recipient: { emailAddress: string },
 ): Promise<void> => {
+    if (env.NODE_ENV === "test") {
+        return;
+    }
     const info = await transporter.sendMail({
         from: env.EMAIL_SENDER,
         to: recipient.emailAddress,
